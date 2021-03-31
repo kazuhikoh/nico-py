@@ -3,13 +3,17 @@
 
 import click
 
+from . import command
+
 @click.group()
 def cli():
     pass
 
 @cli.command()
-def piyo():
-    click.echo('🐥')
+@click.argument('input') 
+@click.argument('output', default='out.mp4')
+def download(input, output):
+    command.download(input, output)
 
 def main():
     cli()
