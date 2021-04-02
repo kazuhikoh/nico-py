@@ -1,3 +1,6 @@
+import sys
+import re
+
 from . import config
 from . import httpclient
 from . import browser
@@ -23,12 +26,23 @@ def list(channelId):
     return True
 
 def download(url, outpath):
+    # so00000000 -> url
+    if re.match(r'so........', url):
+        url = f'https://www.nicovideo.jp/watch/{url}'
+    if re.match(r'lv........', url):
+        url = f'https://www.nicovideo.jp/watch/{url}'
+
+    # Validate URL
+    if not re.match(r'https://www\.nicovideo\.jp/watch/..........', url):
+        print(f'💥 Invalid source: {url}', file=sys.stderr)
+        return False
+
     cfg = config.load()
 
     driver = browser.createWebDriver()
-
     browser.login(driver, cfg['username'], cfg['password'])
-    browser.download(driver, url, outpath)
-
+    ok = browser.download(driver, url, outpath)
     browser.quit(driver)
+
+    return ok
 

@@ -80,7 +80,7 @@ def download(driver, url, outpath):
 
     if stream_url == '':
         print(f'💥 No streaming packet!', file=sys.stderr)
-        return
+        return False
 
     print(f'🐁 capture stream', file=sys.stderr)
     print(f'🧀 in={stream_url}', file=sys.stderr)
@@ -89,6 +89,8 @@ def download(driver, url, outpath):
     res = subprocess.run([
         'ffmpeg', '-i', stream_url, '-c', 'copy', outpath
     ])
+
+    return (res.returncode == 0)
 
 def find_stream_from_logs(driver): 
     logs = driver.get_log("performance")
@@ -151,6 +153,4 @@ def find_playlist_from_master(master):
 
     bestPlaylist = lines[bandwidthMaxIndex + 1]
     return bestPlaylist
-
-
 

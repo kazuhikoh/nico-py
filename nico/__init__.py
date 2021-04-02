@@ -20,7 +20,8 @@ def list(channel):
 @click.argument('input') 
 @click.argument('output', default='out.mp4')
 def download(input, output):
-    command.download(input, output)
+    ok = command.download(input, output)
+    sys.exit( 0 if ok else 1 )
 
 def main():
     cli()
